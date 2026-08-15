@@ -1,13 +1,17 @@
 Fortnite Backport Editor
 ========================
 
-To start the app:
+To start the local PC app:
 
 1. Double-click:
    Start Backport Editor.cmd
 
-2. Your browser opens automatically.
+2. A normal app window opens automatically.
 
-3. Keep the black terminal window open while using the app.
+3. If you want to stop the background server later, double-click:
+   Stop Backport Editor.cmd
 
-If the browser does not open, use the URL shown in the terminal window.
+Optional:
+Double-click Create Desktop Shortcut.cmd to put the app on your desktop.
+
+This is not meant to be used as a browser tab.

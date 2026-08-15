@@ -12,12 +12,24 @@ Double-click:
 Start Backport Editor.cmd
 ```
 
-The app opens in your browser automatically. Keep the terminal window open while using it.
+The app opens as its own local desktop window, without a normal browser tab. The launcher starts the local background server and then closes itself.
+
+Optional desktop shortcut:
+
+```text
+Create Desktop Shortcut.cmd
+```
+
+To stop the background server:
+
+```text
+Stop Backport Editor.cmd
+```
 
 Advanced/manual start:
 
 ```powershell
-npm start
+npm run desktop
 ```
 
 ## MVP Capabilities

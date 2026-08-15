@@ -1,5 +1,6 @@
 import http from "node:http";
 import fs from "node:fs/promises";
+import { accessSync, constants } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
@@ -164,6 +165,7 @@ function sendJson(res, status, body) {
 
 const requestedPort = process.env.PORT ? Number(process.env.PORT) : 5179;
 const shouldOpenBrowser = process.argv.includes("--open");
+const shouldOpenDesktopWindow = process.argv.includes("--desktop");
 
 server.once("error", (error) => {
   if (error.code === "EADDRINUSE") {
@@ -173,6 +175,7 @@ server.once("error", (error) => {
     console.log(url);
     console.log("");
     if (shouldOpenBrowser) openBrowser(url);
+    if (shouldOpenDesktopWindow) openDesktopWindow(url);
     process.exit(0);
   }
   console.error(error.message);
@@ -187,6 +190,7 @@ server.listen(requestedPort, "127.0.0.1", () => {
   console.log("");
   console.log("Keep this window open while using the app.");
   if (shouldOpenBrowser) openBrowser(url);
+  if (shouldOpenDesktopWindow) openDesktopWindow(url);
 });
 
 function openBrowser(url) {
@@ -196,4 +200,49 @@ function openBrowser(url) {
     windowsHide: true
   });
   child.unref();
+}
+
+function openDesktopWindow(url) {
+  const browser = findDesktopBrowser();
+  if (!browser) {
+    openBrowser(url);
+    return;
+  }
+
+  const child = spawn(browser, [
+    `--app=${url}`,
+    "--new-window",
+    "--disable-features=Translate"
+  ], {
+    detached: true,
+    stdio: "ignore",
+    windowsHide: true
+  });
+  child.unref();
+}
+
+function findDesktopBrowser() {
+  const candidates = [
+    "%ProgramFiles(x86)%\\Microsoft\\Edge\\Application\\msedge.exe",
+    "%ProgramFiles%\\Microsoft\\Edge\\Application\\msedge.exe",
+    "%LOCALAPPDATA%\\Microsoft\\Edge\\Application\\msedge.exe",
+    "%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe",
+    "%ProgramFiles(x86)%\\Google\\Chrome\\Application\\chrome.exe",
+    "%LOCALAPPDATA%\\Google\\Chrome\\Application\\chrome.exe"
+  ];
+
+  return candidates.map(expandEnv).find(canExecute) ?? null;
+}
+
+function expandEnv(value) {
+  return value.replace(/%([^%]+)%/g, (_, name) => process.env[name] ?? "");
+}
+
+function canExecute(filePath) {
+  try {
+    accessSync(filePath, constants.X_OK);
+    return true;
+  } catch {
+    return false;
+  }
 }

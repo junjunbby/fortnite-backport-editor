@@ -14,13 +14,11 @@ if errorlevel 1 (
 )
 
 echo.
-echo Starting Fortnite Backport Editor...
-echo The app will open in your browser automatically.
-echo Keep this window open while you use it.
+echo Starting Fortnite Backport Editor as a local desktop app...
 echo.
 
-node src\Core\server.js --open
+powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Start-Process -WindowStyle Hidden -FilePath node -ArgumentList 'src\Core\server.js','--desktop' -WorkingDirectory '%~dp0'"
 
 echo.
-echo App closed.
-pause
+echo App is starting.
+powershell -NoProfile -Command "Start-Sleep -Seconds 2" >nul
