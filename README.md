@@ -4,13 +4,21 @@ This is a first MVP of the requested Windows-focused backport editor. It is inte
 
 The app does not pretend to be a full Unreal version converter. It keeps the old target asset as the structural base and can patch compatible reference strings into a working copy.
 
-## Run
+## Start The App
+
+Double-click:
+
+```text
+Start Backport Editor.cmd
+```
+
+The app opens in your browser automatically. Keep the terminal window open while using it.
+
+Advanced/manual start:
 
 ```powershell
 npm start
 ```
-
-Open the printed local URL in a browser. The UI behaves like a desktop tool and all file access is handled by the local Node process.
 
 ## MVP Capabilities
 

@@ -2,6 +2,7 @@ import http from "node:http";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
 import { SeasonProject } from "../Projects/SeasonProject.js";
 import { FileSystemAssetReader } from "../Assets/FileSystemAssetReader.js";
 import { ReferenceResolver } from "../References/ReferenceResolver.js";
@@ -161,7 +162,38 @@ function sendJson(res, status, body) {
   res.end(JSON.stringify(body, null, 2));
 }
 
-const port = process.env.PORT ? Number(process.env.PORT) : 5179;
-server.listen(port, "127.0.0.1", () => {
-  console.log(`Fortnite UAsset Backport Editor running at http://127.0.0.1:${port}`);
+const requestedPort = process.env.PORT ? Number(process.env.PORT) : 5179;
+const shouldOpenBrowser = process.argv.includes("--open");
+
+server.once("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    const url = `http://127.0.0.1:${requestedPort}`;
+    console.log("");
+    console.log("Fortnite UAsset Backport Editor is already running.");
+    console.log(url);
+    console.log("");
+    if (shouldOpenBrowser) openBrowser(url);
+    process.exit(0);
+  }
+  console.error(error.message);
+  process.exit(1);
 });
+
+server.listen(requestedPort, "127.0.0.1", () => {
+  const url = `http://127.0.0.1:${requestedPort}`;
+  console.log("");
+  console.log("Fortnite UAsset Backport Editor is ready.");
+  console.log(url);
+  console.log("");
+  console.log("Keep this window open while using the app.");
+  if (shouldOpenBrowser) openBrowser(url);
+});
+
+function openBrowser(url) {
+  const child = spawn("cmd", ["/c", "start", "", url], {
+    detached: true,
+    stdio: "ignore",
+    windowsHide: true
+  });
+  child.unref();
+}

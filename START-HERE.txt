@@ -1,0 +1,13 @@
+Fortnite Backport Editor
+========================
+
+To start the app:
+
+1. Double-click:
+   Start Backport Editor.cmd
+
+2. Your browser opens automatically.
+
+3. Keep the black terminal window open while using the app.
+
+If the browser does not open, use the URL shown in the terminal window.
