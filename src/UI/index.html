@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fortnite Backport Editor</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>Fortnite Backport Editor</h1>
+          <p>Lossless-first UAsset inspection and reference patching</p>
+        </div>
+        <div class="season-grid">
+          <label>Source Season <input id="sourceRoot" placeholder="C:\Fortnite\Source\Content"></label>
+          <label>Target Season <input id="targetRoot" placeholder="C:\Fortnite\Target\Content"></label>
+          <button id="scanSource">Scan Source</button>
+          <button id="scanTarget">Scan Target</button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <aside class="browser">
+          <div class="panel-title">
+            <span>Asset Browser</span>
+            <input id="search" placeholder="Filter assets">
+          </div>
+          <div class="category-grid">
+            <button class="active" data-category="all">All</button>
+            <button data-category="items">Items</button>
+            <button data-category="weapons">Weapons</button>
+            <button data-category="meshes">Meshes</button>
+            <button data-category="materials">Materials</button>
+            <button data-category="textures">Textures</button>
+            <button data-category="sounds">Sounds</button>
+            <button data-category="animations">Animations</button>
+          </div>
+          <div class="tabs">
+            <button class="active" data-list="target">Target</button>
+            <button data-list="source">Source</button>
+          </div>
+          <div id="assetList" class="asset-list"></div>
+        </aside>
+
+        <section class="editor">
+          <div class="editor-toolbar">
+            <div>
+              <strong id="assetName">No asset opened</strong>
+              <span id="assetMeta"></span>
+            </div>
+            <div class="actions">
+              <button id="openTarget">Open Target Path</button>
+              <button id="openSource">Open Source Path</button>
+              <button id="compare">Compare</button>
+              <button id="validate">Validate</button>
+              <button id="package">Package</button>
+            </div>
+          </div>
+
+          <div class="editor-grid">
+            <section>
+              <h2>Properties</h2>
+              <div id="properties" class="property-groups empty">Open a `.uasset` to inspect package data.</div>
+            </section>
+            <section>
+              <h2>Source -> Target Compare</h2>
+              <div id="compareRows" class="compare empty">Select one target and one source asset.</div>
+              <h2>Item Backport Assistant</h2>
+              <div class="wizard">
+                <label><input type="checkbox" checked data-component="Weapon Definition"> Weapon Definition</label>
+                <label><input type="checkbox" checked data-component="Weapon Stats"> Weapon Stats</label>
+                <label><input type="checkbox" checked data-component="Skeletal Mesh"> Skeletal Mesh</label>
+                <label><input type="checkbox" checked data-component="Materials"> Materials</label>
+                <label><input type="checkbox" checked data-component="Textures"> Textures</label>
+                <label><input type="checkbox" checked data-component="Animations"> Animations</label>
+                <label><input type="checkbox" checked data-component="Sounds"> Sounds</label>
+                <label><input type="checkbox" checked data-component="VFX"> VFX</label>
+                <label><input type="checkbox" checked data-component="Dependencies"> Dependencies</label>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <aside class="dependencies">
+          <h2>Dependencies</h2>
+          <div id="dependencyGraph" class="graph empty">Validation builds the affected dependency view.</div>
+          <h2>Validation</h2>
+          <div id="validation" class="validation empty">Ready.</div>
+        </aside>
+      </section>
+
+      <footer class="statusbar">
+        <span id="status">Status: Ready</span>
+        <span>Original files are never overwritten.</span>
+      </footer>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
